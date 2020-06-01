@@ -1,7 +1,11 @@
 package pages;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class HomePage {
 	
@@ -11,7 +15,15 @@ public class HomePage {
 	
 	private By userLogged =  By.xpath("//a[@class='account']//span[@class='hidden-sm-down']");
 	
-	private By listProducts = By.className("thumbnail-container");
+	private By products = By.className("thumbnail-container");
+	
+	private By numberInTheCart = By.className("cart-products-count");
+	
+	private By productsName = By.cssSelector(".product-description a");
+	
+	private By productsPrice = By.className("price");
+	
+	List<WebElement> listProducts = new ArrayList<WebElement>();
 	
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
@@ -24,5 +36,33 @@ public class HomePage {
 	
 	public boolean isLogged(String name) {
 		return name.contentEquals(driver.findElement(userLogged).getText());
+	}
+	
+	private void loadListProducts() {
+		listProducts = driver.findElements(products);
+	}
+	
+	public int countProductsFromHome() {
+		loadListProducts();
+		return listProducts.size();
+	}
+	
+	public int numberOfItemsInTheCart() {
+		String number = driver.findElement(numberInTheCart).getText()
+				.replace("(", "").replace(")", "");
+		return Integer.parseInt(number);
+	}
+	
+	public String getProductName(int index) {
+		return driver.findElements(productsName).get(index).getText();
+	}
+	
+	public String getProductPrice(int index) {
+		return driver.findElements(productsPrice).get(index).getText();
+	}
+	
+	public ProductPage selectProduct(int index) {
+		driver.findElements(productsName).get(index).click();
+		return new ProductPage(driver);
 	}
 }

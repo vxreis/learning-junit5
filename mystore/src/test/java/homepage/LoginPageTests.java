@@ -3,14 +3,11 @@ package homepage;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
 
 import base.BaseTests;
 import pages.LoginPage;
 
 public class LoginPageTests extends BaseTests {
-	
-	private WebDriver driver;
 	
 	@Test
 	public void test_givenUserAndPasswodValid_thenUserLogged() {
