@@ -35,7 +35,13 @@ public class HomePage {
 	}
 	
 	public boolean isLogged(String name) {
-		return name.contentEquals(driver.findElement(userLogged).getText());
+		try {
+			return name.contentEquals(driver.findElement(userLogged).getText());
+		} catch (NoSuchMethodError e) {
+			return false;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	
 	private void loadListProducts() {

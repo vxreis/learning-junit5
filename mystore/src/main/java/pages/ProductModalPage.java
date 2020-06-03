@@ -14,11 +14,7 @@ public class ProductModalPage {
 	
 	private By statusAddToCart = By.id("myModalLabel");
 	
-	private By size = By.xpath("//span[1]//strong[1]");
-	
-	private By color = By.xpath("//span[2]//strong[1]");
-	
-	private By amount = By.xpath("//span[3]//strong[1]");
+	private By productInfo = By.tagName("strong");
 	
 	public ProductModalPage(WebDriver driver) {
 		this.driver = driver;
@@ -33,14 +29,14 @@ public class ProductModalPage {
 	}
 	
 	public String getSize() {
-		return driver.findElement(size).getText();
+		return driver.findElements(productInfo).get(0).getText();
 	}
 	
 	public String getColor() {
-		return driver.findElement(color).getText();
+		return driver.findElements(productInfo).get(1).getText();
 	}
 	
-	public String getAmount() {
-		return driver.findElement(amount).getText();
+	public int getAmount() {
+		return Integer.parseInt(driver.findElements(productInfo).get(2).getText());
 	}
 }

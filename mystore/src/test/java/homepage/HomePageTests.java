@@ -48,20 +48,24 @@ public class HomePageTests extends BaseTests {
 	
 	@Test
 	public void test_givenUserLoggedAndAddProductInTheCart_thenShowMessageSuccess() {
+		String size = "M";
+		int amount = 2;
+		
 		if (!homePage.isLogged("Marcelo Bittencourt")) {
 			test_givenUserAndPasswodValid_thenUserLogged(); 
+			loadPage();
 		}
 		
 		product = homePage.selectProduct(0);
-		product.selectSize("M");
+		product.selectSize(size);
 		product.selectBlackColor();
-		product.setAmount(2);
+		product.setAmount(amount);
 		
 		ProductModalPage productModalPage = product.clickAddToCard();
 		
 		assertTrue(productModalPage.getMsgAddToCart().endsWith("Product successfully added to your shopping cart"));
-		assertEquals("M", productModalPage.getSize());
+		assertEquals(size, productModalPage.getSize());
 		assertEquals("Black", productModalPage.getColor());
-		assertEquals("2", productModalPage.getAmount());
+		assertEquals(amount, productModalPage.getAmount());
 	}
 }
