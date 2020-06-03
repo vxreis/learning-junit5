@@ -24,7 +24,7 @@ public class ProductPage {
 	
 	private By btnAddToCart = By.className("add-to-cart");
 	
-	private List<String> listSize = new ArrayList();
+	private List<String> listSize;
 	
 	public ProductPage(WebDriver driver) {
 		this.driver = driver;
@@ -35,7 +35,7 @@ public class ProductPage {
 	}
 	
 	public String getPrice() {
-		return driver.findElement(price).getText();
+		return driver.findElement(price).getText().replace("$", "");
 	}
 	
 	public Select findDropdownSize() {
@@ -44,12 +44,12 @@ public class ProductPage {
 	
 	public List<String> getListSize(){
 		List<WebElement> listSizeSelected = findDropdownSize().getAllSelectedOptions();
-		List<String> tempList = new ArrayList();
+		listSize = new ArrayList();
 		for (WebElement element: listSizeSelected) {
-			tempList.add(element.getText());
+			listSize.add(element.getText());
 		}
 		
-		return tempList;
+		return listSize;
 	}
 	
 	public void selectSize(String chosenSize) {

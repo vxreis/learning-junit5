@@ -13,7 +13,7 @@ import pages.ProductPage;
 public class HomePageTests extends BaseTests {
 	
 	LoginPage loginPage;
-	ProductPage product;
+	ProductPage productPage;
 	
 	@Test
 	public void test_givenOpenPage_thenShowEightProducts() {
@@ -30,10 +30,10 @@ public class HomePageTests extends BaseTests {
 		String nameFromHome = homePage.getProductName(0);
 		String priceFromHome = homePage.getProductPrice(0);
 		
-		product = homePage.selectProduct(0);
+		productPage = homePage.selectProduct(0);
 		
-		String nameFromDetail = product.getName();
-		String priceFromDetail = product.getPrice();
+		String nameFromDetail = productPage.getName();
+		String priceFromDetail = productPage.getPrice();
 		
 		assertEquals(nameFromHome.toUpperCase(), nameFromDetail.toUpperCase());
 		assertEquals(priceFromHome.toUpperCase(), priceFromDetail.toUpperCase());
@@ -51,21 +51,35 @@ public class HomePageTests extends BaseTests {
 		String size = "M";
 		int amount = 2;
 		
-		if (!homePage.isLogged("Marcelo Bittencourt")) {
+		/*if (!homePage.isLogged("Marcelo Bittencourt")) {
 			test_givenUserAndPasswodValid_thenUserLogged(); 
 			loadPage();
-		}
+		}*/
 		
-		product = homePage.selectProduct(0);
-		product.selectSize(size);
-		product.selectBlackColor();
-		product.setAmount(amount);
+		productPage = homePage.selectProduct(0);
+		productPage.selectSize(size);
+		productPage.selectBlackColor();
+		productPage.setAmount(amount);
 		
-		ProductModalPage productModalPage = product.clickAddToCard();
+		Double priceFromDetail = Double.parseDouble(productPage.getPrice());
+		String nameProduct = productPage.getName().toUpperCase();
+		Double price = Double.parseDouble(productPage.getPrice());
+		
+		ProductModalPage productModalPage = productPage.clickAddToCard();
 		
 		assertTrue(productModalPage.getMsgAddToCart().endsWith("Product successfully added to your shopping cart"));
+		
+		assertEquals(nameProduct, productModalPage.getName().toUpperCase());
+		assertEquals(priceFromDetail, Double.parseDouble(productModalPage.getPrice()));
 		assertEquals(size, productModalPage.getSize());
 		assertEquals("Black", productModalPage.getColor());
 		assertEquals(amount, productModalPage.getAmount());
+		
+		Double subTotal = Double.parseDouble(productModalPage.getSubTotal());
+		Double shipping = Double.parseDouble(productModalPage.getSipping());
+		Double total = Double.parseDouble(productModalPage.getTotal());
+		
+		assertEquals(price * amount, subTotal);
+		assertEquals(subTotal + shipping, total);
 	}
 }
