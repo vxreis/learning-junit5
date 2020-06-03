@@ -1,7 +1,12 @@
 package pages;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 public class ProductPage {
 
@@ -9,8 +14,17 @@ public class ProductPage {
 	
 	private By name = By.className("h1");
 	
-	private By price = By.xpath("//div[@class='product-price h5 has-discount']//span[1]");
-
+	private By price = By.cssSelector(".current-price span:nth-child(1)");
+	
+	private By size = By.id("group_1");
+	
+	private By amount = By.id("quantity_wanted");
+	
+	private By colorBlack = By.xpath("//ul[@id='group_2']//input[@value='11']");
+	
+	private By btnAddToCart = By.className("add-to-cart");
+	
+	private List<String> listSize = new ArrayList();
 	
 	public ProductPage(WebDriver driver) {
 		this.driver = driver;
@@ -22,5 +36,37 @@ public class ProductPage {
 	
 	public String getPrice() {
 		return driver.findElement(price).getText();
+	}
+	
+	public Select findDropdownSize() {
+		return new Select(driver.findElement(size));
+	}
+	
+	public List<String> getListSize(){
+		List<WebElement> listSizeSelected = findDropdownSize().getAllSelectedOptions();
+		List<String> tempList = new ArrayList();
+		for (WebElement element: listSizeSelected) {
+			tempList.add(element.getText());
+		}
+		
+		return tempList;
+	}
+	
+	public void selectSize(String chosenSize) {
+		findDropdownSize().selectByVisibleText(chosenSize);
+	}
+	
+	public void selectBlackColor() {
+		driver.findElement(colorBlack).click();
+	}
+	
+	public void setAmount(int number) {
+		driver.findElement(amount).clear();
+		driver.findElement(amount).sendKeys(Integer.toString(number));
+	}
+	
+	public ProductModalPage clickAddToCard() {
+		driver.findElement(btnAddToCart).click();
+		return new ProductModalPage(driver);
 	}
 }

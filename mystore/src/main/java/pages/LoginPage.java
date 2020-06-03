@@ -28,4 +28,10 @@ public class LoginPage {
 	public void clickBtnSignIn() {
 		driver.findElement(btnSignIn).click();
 	}
+	
+	public void toSign(String email, String password) {
+		fillEmail(email);
+		fillPassword(password);
+		clickBtnSignIn();
+	}
 }

@@ -12,9 +12,7 @@ public class LoginPageTests extends BaseTests {
 	@Test
 	public void test_givenUserAndPasswodValid_thenUserLogged() {
 		LoginPage loginPage = homePage.clickBtnSignIn();
-		loginPage.fillEmail("marcelo@teste.com");
-		loginPage.fillPassword("marcelo");
-		loginPage.clickBtnSignIn();
+		loginPage.toSign("marcelo@teste.com", "marcelo");
 		assertTrue(homePage.isLogged("Marcelo Bittencourt"));
 	}
 }
