@@ -7,7 +7,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ProductModalPage {
 	
@@ -69,6 +68,7 @@ public class ProductModalPage {
 	}
 	
 	public String getSubTotal() {
+		//return UtilFunctions.removeDollarSign(driver.findElements(totalPrice).get(0).getText());
 		return driver.findElements(totalPrice).get(0).getText().replace("$", "");
 	}
 	

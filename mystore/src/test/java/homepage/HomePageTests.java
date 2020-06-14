@@ -6,14 +6,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import base.BaseTests;
+import pages.CartPage;
 import pages.LoginPage;
 import pages.ProductModalPage;
 import pages.ProductPage;
 
 public class HomePageTests extends BaseTests {
 	
+	// Pages
 	LoginPage loginPage;
 	ProductPage productPage;
+	ProductModalPage productModalPage;
 	
 	@Test
 	public void test_givenOpenPage_thenShowEightProducts() {
@@ -40,21 +43,9 @@ public class HomePageTests extends BaseTests {
 	}
 	
 	@Test
-	public void test_givenUserAndPasswodValid_thenUserLogged() {
-		loginPage = homePage.clickBtnSignIn();
-		loginPage.toSign("marcelo@teste.com", "marcelo");
-		assertTrue(homePage.isLogged("Marcelo Bittencourt"));
-	}
-	
-	@Test
 	public void test_givenUserLoggedAndAddProductInTheCart_thenShowMessageSuccess() {
 		String size = "M";
 		int amount = 2;
-		
-		/*if (!homePage.isLogged("Marcelo Bittencourt")) {
-			test_givenUserAndPasswodValid_thenUserLogged(); 
-			loadPage();
-		}*/
 		
 		productPage = homePage.selectProduct(0);
 		productPage.selectSize(size);
@@ -65,7 +56,7 @@ public class HomePageTests extends BaseTests {
 		String nameProduct = productPage.getName().toUpperCase();
 		Double price = Double.parseDouble(productPage.getPrice());
 		
-		ProductModalPage productModalPage = productPage.clickAddToCard();
+		productModalPage = productPage.clickAddToCard();
 		
 		assertTrue(productModalPage.getMsgAddToCart().endsWith("Product successfully added to your shopping cart"));
 		
@@ -76,10 +67,20 @@ public class HomePageTests extends BaseTests {
 		assertEquals(amount, productModalPage.getAmount());
 		
 		Double subTotal = Double.parseDouble(productModalPage.getSubTotal());
-		Double shipping = Double.parseDouble(productModalPage.getSipping());
-		Double total = Double.parseDouble(productModalPage.getTotal());
+		Double totalWithTax = Double.parseDouble(productModalPage.getTotal());
+		Double totalWithoutTax = Double.parseDouble(productModalPage.geTtotalPriceWithoutTax());
 		
-		assertEquals(price * amount, subTotal);
-		assertEquals(subTotal + shipping, total);
+		assertEquals(productModalPage.calcSubTotal(), subTotal);
+		assertEquals(productModalPage.calcTotalWithTax(), totalWithTax);
+		assertEquals(productModalPage.calcTotalWithoutTax(), totalWithoutTax);
 	}
+	
+	/*@Test
+	public void test_givenThatGoToTheCart_thenTheInformationMustPersist() {
+		test_givenUserLoggedAndAddProductInTheCart_thenShowMessageSuccess();
+		
+		CartPage cartPage = productModalPage.clickCheckout();
+		
+		assertTrue(cartPage.isCartPage());
+	}*/
 }
