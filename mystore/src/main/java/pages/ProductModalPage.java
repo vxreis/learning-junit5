@@ -7,6 +7,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ProductModalPage {
 	
@@ -22,18 +23,28 @@ public class ProductModalPage {
 	
 	private By totalPrice = By.cssSelector("div p span.value");
 	
+	private By totalPriceWithoutTax = By.xpath("//p[4]//span[2]");
+	
+	private By btnCheckout = By.cssSelector("div.cart-content-btn a");
+	
 	public ProductModalPage(WebDriver driver) {
 		this.driver = driver;
 	}
 	
 	private void waitElement(By element) {
-		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(5))
-				.pollingEvery(Duration.ofSeconds(1)).ignoring(NoSuchElementException.class);
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+				.withTimeout(Duration.ofSeconds(5))
+				.pollingEvery(Duration.ofSeconds(1))
+				.ignoring(NoSuchElementException.class);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(element));
 	}
 	
 	public String getMsgAddToCart() {
-		waitElement(statusAddToCart);
+		/* Espera explícita
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(statusAddToCart)); */
+		
+		waitElement(statusAddToCart);  // Espera customizada
 		return driver.findElement(statusAddToCart).getText();
 	}
 	
@@ -61,11 +72,37 @@ public class ProductModalPage {
 		return driver.findElements(totalPrice).get(0).getText().replace("$", "");
 	}
 	
-	public String getSipping() {
+	public String getShipping() {
 		return driver.findElements(totalPrice).get(1).getText().replace("$", "");
 	}
 	
 	public String getTotal() {
 		return driver.findElements(totalPrice).get(2).getText().replace("$", "");
+	}
+	
+	public String getTaxes() {
+		return driver.findElements(totalPrice).get(3).getText().replace("$", "");
+	}
+	
+	public String geTtotalPriceWithoutTax() {
+		return driver.findElement(totalPriceWithoutTax).getText().replace("$", "");
+	}
+	
+	public Double calcSubTotal() {
+		Double priceInDouble = Double.parseDouble(getPrice());
+		return priceInDouble * getAmount();
+	}
+	
+	public Double calcTotalWithTax() {
+		return calcSubTotal() + Double.parseDouble(getShipping()) + Double.parseDouble(getTaxes());
+	}
+	
+	public Double calcTotalWithoutTax() {
+		return calcSubTotal() + Double.parseDouble(getShipping());
+	}
+	
+	public CartPage clickCheckout() {
+		driver.findElement(btnCheckout).click();
+		return new CartPage(driver);
 	}
 }
