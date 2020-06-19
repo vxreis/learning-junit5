@@ -13,6 +13,8 @@ public class LoginPage {
 	
 	private By btnSignIn = By.id("submit-login");
 	
+	private By lblAlert = By.cssSelector("li.alert");
+	
 	public LoginPage(WebDriver driver) {
 		this.driver = driver;
 	}
@@ -33,5 +35,9 @@ public class LoginPage {
 		fillEmail(email);
 		fillPassword(password);
 		clickBtnSignIn();
+	}
+	
+	public Boolean getAlertLoginFailed() {
+		return driver.findElement(lblAlert).getText().endsWith("Authentication failed.");
 	}
 }

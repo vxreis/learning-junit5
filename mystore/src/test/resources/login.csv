@@ -1,0 +1,3 @@
+testName;user;password;fullName;result
+validLogin;marcelo@teste.com;marcelo;Marcelo Bittencourt;true
+invalidLogin;marcelo@teste.com;teste123;;false

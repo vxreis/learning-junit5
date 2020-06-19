@@ -23,6 +23,8 @@ public class HomePage {
 	
 	private By productsPrice = By.className("price");
 	
+	private By btnLogout = By.cssSelector("a.logout");
+	
 	List<WebElement> listProducts = new ArrayList<WebElement>();
 	
 	public HomePage(WebDriver driver) {
@@ -70,5 +72,9 @@ public class HomePage {
 	public ProductPage selectProduct(int index) {
 		driver.findElements(productsName).get(index).click();
 		return new ProductPage(driver);
+	}
+	
+	public void getClickLogout() {
+		driver.findElement(btnLogout).click();
 	}
 }
