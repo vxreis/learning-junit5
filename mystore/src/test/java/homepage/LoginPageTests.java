@@ -26,6 +26,8 @@ public class LoginPageTests extends BaseTests {
 		LoginPage loginPage = homePage.clickBtnSignIn();
 		loginPage.toSign(user, password);
 		
+		takeScreenshot(testName);
+		
 		if (result) {
 			assertTrue(homePage.isLogged(fullName));
 			homePage.getClickLogout();
@@ -33,6 +35,5 @@ public class LoginPageTests extends BaseTests {
 		else {
 			assertTrue(loginPage.getAlertLoginFailed());
 		}
-		
 	}
 }
